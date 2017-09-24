@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Ejemplo echo con Websockets</title>
+</head>
+<body>
+<h1>EJEMPLO ECHO DE WEBSOCKETS CON TOMCAT 7</h1>
+<script type="text/javascript">
+
+    var ws = null;
+
+    function connect() {
+        if (window.WebSocket){
+             console.log("BROWSER SUPPORTED");
+        } else {
+             console.log("BROWSER NOT SUPPORTED");
+        }
+
+        var URL = 'ws://' + location.host  + '/echoWebSocket/echo';
+        ws = new WebSocket(URL);
+
+        ws.onopen = function () {
+            addMessage('Concectado!');
+        };
+        ws.onmessage = function (event) {
+            var message = event.data;
+            addMessage(message);
+        };
+
+        ws.onclose = function (event) {
+            addMessage('Desconectado!');
+        };
+
+        ws.onerror = function (event) {
+            addMessage('Se produjo un error!');
+        };
+    }
+
+    function disconnect() {
+        if (ws != null) {
+            ws.close();
+            ws = null;
+        }
+    }
+
+    function sendMessage(message) {
+        if (ws != null) {
+            ws.send(message);
+        }
+    }
+
+    function addMessage(message) {
+        var messages = document.getElementById('messages').value;
+        messages += (message + '\n');
+        document.getElementById('messages').value = messages;
+    }
+
+</script>
+
+<label for="name">Nombre:</label> <input type="text" id="name"/>
+<br/><br/>
+<button onclick="connect()">Conectar</button>
+<button onclick="disconnect()">Desconectar</button>
+<button onclick="sendMessage(document.getElementById('name').value)">Enviar mensaje</button>
+<br/><br/>
+<textarea rows="5" cols="50" id="messages"></textarea>
+
+</body>
+</html>

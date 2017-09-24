@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ejemplo websocket con seguridad</title>
+	<script src="webjars/jquery/jquery.min.js" ></script>
+	<script src="webjars/sockjs-client/sockjs.min.js"></script>
+	<script src="webjars/stomp-websocket/stomp.min.js"></script>
+	<script src="/app.js"></script>
+</head>
+<body>
+	<div>
+		<div>
+			<form>
+				<div>
+					<label for="conectar">Ejemplo websocket con seguridad</label>
+					<button id="conectar" type="submit">Conectar</button>
+					<button id="desconectar" disabled="true" type="submit">Desconectar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div>
+		<button id="preguntar" type="button">Preguntar</button>
+	</div>
+	<div>
+		<div>
+			<table id="datos" border="1">
+				<thead>
+					<tr>
+						<th>Total</th>
+						<th>Maxima</th>
+						<th>Libre</th>
+					</tr>
+				<thead>
+				<tbody id="datosMemoria">
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</body>
+</html>

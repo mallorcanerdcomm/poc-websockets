@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Saludo WebSocket en SpringBoot sin Stomp</title>
+	<script>
+		var ws;
+
+		function manipularConexion(conectado)
+		{
+			document.getElementById("conectar").disabled = conectado;
+			document.getElementById("desconectar").disabled = !conectado;
+			document.getElementById("saludo").innerHTML = '';
+		}
+
+		function conectar()
+		{
+			ws = new WebSocket("ws://localhost:8080/saludo");
+			ws.onmessage = function (datos){
+				mostrarSaludo(datos.data);
+			}
+			manipularConexion(true);
+			console.log("Conectado");
+		}
+
+		function desconectar()
+		{
+			if (ws != null){
+				ws.close();
+			}
+			manipularConexion(false);
+			console.log("Desconectado");
+		}
+
+		function enviar()
+		{
+			var texto = document.getElementById("nombre").value;
+			ws.send(texto);
+		}
+
+		function mostrarSaludo(texto)
+		{
+			document.getElementById("saludo").innerHTML = texto;
+		}
+	</script>
+</head>
+<body>
+	<h1>Saludo WebSocket en SpringBoot sin Stomp</h1>
+	
+	<div>
+		<div>
+			Conectar al websocket<br/>
+			<button id="conectar" type="button" onclick="conectar()">Conectar</button><br/>
+			<button id="desconectar" type="button" disabled="false" onclick="desconectar()">Desconectar</button>
+		</div>
+	</div>
+	<div>
+		<div>
+			Escribe tu nombre:
+			<input type="text" name="nombre" id="nombre" placeholder="Tu nombre es..." />
+		</div>
+		<button id="enviar" type="button" onclick="enviar()">Enviar</button>
+	</div>
+	<div id="saludo"></div>
+</body>
+</html>

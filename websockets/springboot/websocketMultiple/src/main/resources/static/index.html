@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WebSocket multiple en SpringBoot sin Stomp</title>
+	<script>
+		var websocketSaludo;
+
+		function manipularConexionSaludo(conectado)
+		{
+			document.getElementById("conectarSaludo").disabled = conectado;
+			document.getElementById("desconectarSaludo").disabled = !conectado;
+			document.getElementById("saludo").innerHTML = '';
+		}
+
+		function conectarSaludo()
+		{
+			websocketSaludo = new WebSocket("ws://localhost:8080/saludo");
+			websocketSaludo.onmessage = function (datos){
+				mostrarSaludo(datos.data);
+			}
+			manipularConexionSaludo(true);
+		}
+
+		function desconectarSaludo()
+		{
+			if (websocketSaludo != null){
+				websocketSaludo.close();
+			}
+			manipularConexionSaludo(false);
+		}
+
+		function enviarSaludo()
+		{
+			var texto = document.getElementById("nombre").value;
+			websocketSaludo.send(texto);
+		}
+
+		function mostrarSaludo(texto)
+		{
+			document.getElementById("saludo").innerHTML = texto;
+		}
+
+		var websocketContador;
+
+		function manipularConexionContador(conectado)
+		{
+			document.getElementById("conectarContador").disabled = conectado;
+			document.getElementById("desconectarContador").disabled = !conectado;
+		}
+
+		function conectarContador()
+		{
+			websocketContador = new WebSocket("ws://localhost:8080/contador");
+			websocketContador.onmessage = function (datos){
+				mostrarContador(datos.data);
+			}
+			manipularConexionContador(true);
+		}
+
+		function desconectarContador()
+		{
+			if (websocketContador != null){
+				websocketContador.close();
+			}
+			manipularConexionContador(false);
+			document.getElementById("contador").innerHTML = '';
+		}
+
+		function mostrarContador(texto)
+		{
+			document.getElementById("contador").innerHTML = document.getElementById("contador").innerHTML + '<br/>' + texto;
+		}
+	</script>
+</head>
+<body>
+	<h1>WebSocket multiple en SpringBoot sin Stomp</h1>
+	
+	<div>
+		<div>
+			Conectar al websocket de saludo<br/>
+			<button id="conectarSaludo" type="button" onclick="conectarSaludo()">Conectar</button><br/>
+			<button id="desconectarSaludo" type="button" disabled="false" onclick="desconectarSaludo()">Desconectar</button>
+		</div>
+	</div>
+	<div>
+		<div>
+			Escribe tu nombre:
+			<input type="text" name="nombre" id="nombre" placeholder="Tu nombre es..." />
+		</div>
+		<button id="enviarSaludo" type="button" onclick="enviarSaludo()">Enviar</button>
+	</div>
+	<div id="saludo"></div>
+
+	<br />
+	<br />
+	<br />
+
+	<div>
+		<div>
+			Conectar al websocket de contador<br/>
+			<button id="conectarContador" type="button" onclick="conectarContador()">Conectar</button><br/>
+			<button id="desconectarContador" type="button" disabled="false" onclick="desconectarContador()">Desconectar</button>
+		</div>
+	</div>
+	<div id="contador"></div>
+</body>
+</html>
